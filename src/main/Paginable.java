@@ -8,14 +8,15 @@ import java.util.List;
 public class Paginable <E extends Producto> {
 
 	/*
-	 * add					
-	 * remove				
-	 * contains			 	
-	 * getPage(int index)	
-	 * int getTotalPages()	
-	 * size					
+	 * add()					
+	 * remove()					
+	 * contains()				
+	 * getPage(int index)		
+	 * findPageOf(Producto p)	
+	 * int getTotalPages()		
+	 * size()					
 	 * */
-	
+		
 	private Hashtable<Integer, Producto<?>> productos = new Hashtable<Integer, Producto<?>>();
 	private int prodPorPag = 3;
 	private int numDePags = 0;
