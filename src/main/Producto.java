@@ -37,7 +37,7 @@ public class Producto<E> implements Comparable<Object>{	//implementar comparable
 	}
 	
 	/***
-	 * Si son iguales devuelve true, si no false. 
+	 * Si tienen la misma id devuelve true, si no false. 
 	 */
 	@Override
 	public boolean equals(Object arg0) {

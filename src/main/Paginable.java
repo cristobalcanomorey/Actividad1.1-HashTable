@@ -16,13 +16,16 @@ public class Paginable <E extends Producto> {
 	 * size					
 	 * */
 	
-	private Hashtable productos = new Hashtable();
+	private Hashtable<Integer, Producto<?>> productos = new Hashtable<Integer, Producto<?>>();
 	private int prodPorPag = 3;
 	private int numDePags = 0;
 	
 	Paginable(Producto<?>[] prod){
 //		this.productos = new ArrayList<Producto<?>>(Arrays.asList(prod));
-		this.productos = new Hashtable(prod.hashCode());
+		for (int i = 0; i < prod.length; i++) {
+			this.productos.put(prod[i].getId(), prod[i]);
+		}
+//		this.productos = new Hashtable(prod.hashCode());
 		numDePags = (int) Math.ceil(productos.size()/prodPorPag);
 	}
 		
@@ -31,7 +34,7 @@ public class Paginable <E extends Producto> {
 	 * @param p Producto
 	 */
 	public void add(Producto<?> p){
-		productos.
+//		productos.
 		numDePags++;
 	}
 	
