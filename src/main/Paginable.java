@@ -10,7 +10,7 @@ public class Paginable <E extends Producto> {
 	/*
 	 * add					
 	 * remove				
-	 * contains				
+	 * contains			 	
 	 * getPage(int index)	
 	 * int getTotalPages()	
 	 * size					
