@@ -21,13 +21,34 @@ public class Paginable <E extends Producto> {
 	private int prodPorPag = 3;
 	private int numDePags = 0;
 	
+	/***
+	 * Crea un paginable transformando un array de productos a un HashTable sin productos repetidos
+	 * @param prod Array de productos
+	 */
 	Paginable(Producto<?>[] prod){
-//		this.productos = new ArrayList<Producto<?>>(Arrays.asList(prod));
-		for (int i = 0; i < prod.length; i++) {
-			this.productos.put(prod[i].getId(), prod[i]);
-		}
-//		this.productos = new Hashtable(prod.hashCode());
+		this.productos = quitaRepetidos(prod);
 		numDePags = (int) Math.ceil(productos.size()/prodPorPag);
+	}
+	
+	/***
+	 * Devuelve un hash sin productos repetidos
+	 * @param prod
+	 * @return
+	 */
+	private Hashtable<Integer, Producto<?>> quitaRepetidos(Producto<?>[] prod){
+		ArrayList<Producto<?>> lista = new ArrayList<Producto<?>>(Arrays.asList(prod));
+		ArrayList<Producto<?>> listaSinRepe = new ArrayList<Producto<?>>();		
+		for (Producto<?> producto : lista) {
+			if(!listaSinRepe.contains(producto)) {
+				listaSinRepe.add(producto);
+			}
+		}
+		
+		Hashtable<Integer, Producto<?>> hProductos = new Hashtable<Integer, Producto<?>>();
+		for (Producto<?> producto : listaSinRepe) {
+			hProductos.put(producto.getId(), producto);
+		}
+		return hProductos;
 	}
 		
 	/***
@@ -35,7 +56,9 @@ public class Paginable <E extends Producto> {
 	 * @param p Producto
 	 */
 	public void add(Producto<?> p){
-//		productos.
+		if(!productos.contains(p)) {
+			productos.put(p.getId(), p);
+		}
 		numDePags++;
 	}
 	
