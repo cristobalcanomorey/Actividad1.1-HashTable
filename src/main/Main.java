@@ -12,11 +12,11 @@ public class Main {
 		Producto<?> p6 = new Producto(6,"Placa madre",100d);
 		Producto<?> p7 = new Producto(7,"GPU",47d);
 		
-		Producto<?>[] ap = {p1,p2,p3};
+		Producto<?>[] ap = {p1,p2,p3,p4};
 		
 		Paginable pg = new Paginable(ap);
 		
-		pg.add(p4);
+//		pg.add(p4);
 
 		Producto<?>[] pag1 = pg.getPage(0);
 		

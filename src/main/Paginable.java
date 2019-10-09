@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +29,8 @@ public class Paginable <E extends Producto> {
 	 */
 	Paginable(Producto<?>[] prod){
 		this.productos = quitaRepetidos(prod);
-		numDePags = (int) Math.ceil(productos.size()/prodPorPag);
+		Double division = (double) productos.size() / prodPorPag;
+		numDePags = (int) Math.ceil(division);
 	}
 	
 	/***
@@ -37,6 +39,7 @@ public class Paginable <E extends Producto> {
 	 * @return
 	 */
 	private Hashtable<Integer, Producto<?>> quitaRepetidos(Producto<?>[] prod){
+//		Producto<?>[] invertido = invertir(prod, prod.length);
 		ArrayList<Producto<?>> lista = new ArrayList<Producto<?>>(Arrays.asList(prod));
 		ArrayList<Producto<?>> listaSinRepe = new ArrayList<Producto<?>>();		
 		for (Producto<?> producto : lista) {
@@ -51,34 +54,66 @@ public class Paginable <E extends Producto> {
 		}
 		return hProductos;
 	}
+	
+	private Object[] invertir(Object[] array, int size){
+		Integer[] b = new Integer[size]; 
+        int j = size; 
+        for (int i = 0; i < size; i++) { 
+            b[j - 1] = (Integer) array[i]; 
+            j = j - 1; 
+        }
+        return b;
+	}
+	
+	private ArrayList<Producto<?>> deHashAArray(Hashtable<Integer, Producto<?>> hash){
+		Set<Integer> ids = productos.keySet();
+		Object[] array = ids.toArray();
+		array = invertir(array, array.length);
+		ArrayList<Producto<?>> arrayList = new ArrayList<Producto<?>>();
+		for (Object id : array) {
+//			System.out.println(id);
+			arrayList.add(hash.get(id));
+		}
+		return arrayList;
+	}
 		
 	/***
-	 * Solo añade productos en el array
+	 * Solo añade productos en el hash
 	 * @param p Producto
 	 */
-	public void add(Producto<?> p){
+	public boolean add(Producto<?> p){
 		if(!productos.contains(p)) {
 			productos.put(p.getId(), p);
+			numDePags = findPageOf(p, deHashAArray(productos));
+			return true;
+		} else {
+			return false;
 		}
-		numDePags = findPageOf(p);
+		
 	}
 	
 	/***
-	 * Elimina el producto del array
+	 * Elimina el producto de la tabla si está y actualiza el nº de páginas buscando
+	 * la página del último elemento de la lista
+	 * 
 	 * @param p Producto
 	 */
-//	public void remove(Producto<?> p) {
-//		if(contains(p)) {
-//			productos.remove(p);
-//		}
-//		
-//		numDePags--;
-//	}
+	public boolean remove(Producto<?> p) {
+		if(contains(p)) {
+			productos.remove(p.getId());
+			ArrayList<Producto<?>> lista = deHashAArray(productos);
+			numDePags = findPageOf(lista.get(lista.size() - 1), lista);
+			
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	/***
-	 * Busca si el producto está en el array
+	 * Busca si el producto está en la tabla
 	 * @param p Producto
-	 * @return True si p está en el array
+	 * @return True si p está en la tabla
 	 */
 	public boolean contains(Producto<?> producto) {
 		boolean resul = false;
@@ -98,35 +133,50 @@ public class Paginable <E extends Producto> {
 	 * @param n Número de página
 	 * @return Devuelve array de productos
 	 */
-//	public Producto<?>[] getPage(int n) {
-//		int tamPag = prodPorPag;
-//		int primProd = n * prodPorPag;
-//		int ultProd = primProd + prodPorPag;
-//		if(ultProd>productos.size()) {
-//			ultProd = productos.size();
-//			tamPag = ultProd-primProd;
-//		}
-//		Producto<?>[] resul = new Producto<?>[tamPag];
-//		List pag = productos.subList(primProd, ultProd);
-//				
-//		for (int i = 0; i < pag.size(); i++) {
-//			resul[i] = (Producto<?>) pag.get(i);
-//		}
-////		
-////		resul = (Producto<?>[]) pag.toArray();
+	public Producto<?>[] getPage(int n) {
+		int tamPag = prodPorPag;
+		int primProd = n * prodPorPag;
+		int ultProd = primProd + prodPorPag;
+		if(ultProd>productos.size()) {
+			ultProd = productos.size();
+			tamPag = ultProd-primProd;
+		}
+		Producto<?>[] resul = new Producto<?>[tamPag];
+		ArrayList<Producto<?>> lista = deHashAArray(productos);
+		List pag = lista.subList(primProd, ultProd);
+				
+		for (int i = 0; i < pag.size(); i++) {
+			resul[i] = (Producto<?>) pag.get(i);
+		}
 //		
-//		return resul;
-//	}
+//		resul = (Producto<?>[]) pag.toArray();
+		
+		return resul;
+	}
 	
-	public int findPageOf(Producto<?> p) {
-		if(!productos.contains(p)) {
+	public int findPageOf(Producto<?> p, ArrayList<Producto<?>> lista) {
+		if(!lista.contains(p)) {
 			return -1;
 		} else {
-			productos.
+			return (int) Math.ceil((double)(lista.indexOf(p) + 1) / prodPorPag);
 		}
 	}
 	
-//	private int 
+	public int findPageOf(Producto<?> p, boolean orden) {
+		ArrayList<Producto<?>> ordenados = ordenar(orden);
+		return findPageOf(p, ordenados);
+	}
+	
+	private ArrayList<Producto<?>> ordenar(boolean menAMay) {
+		ArrayList<Producto<?>> ordenados = deHashAArray(productos);
+		if (menAMay) {
+			Collections.sort(ordenados);
+			return ordenados;
+		} else {
+			Collections.reverse(ordenados);
+			return ordenados;
+		}
+	}
 	
 	public int getTotalPages() {
 		
