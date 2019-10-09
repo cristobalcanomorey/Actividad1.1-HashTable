@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 
 public class Paginable <E extends Producto> {
 
@@ -59,20 +60,20 @@ public class Paginable <E extends Producto> {
 		if(!productos.contains(p)) {
 			productos.put(p.getId(), p);
 		}
-		numDePags++;
+		numDePags = findPageOf(p);
 	}
 	
 	/***
 	 * Elimina el producto del array
 	 * @param p Producto
 	 */
-	public void remove(Producto<?> p) {
-		if(contains(p)) {
-			productos.remove(p);
-		}
-		
-		numDePags--;
-	}
+//	public void remove(Producto<?> p) {
+//		if(contains(p)) {
+//			productos.remove(p);
+//		}
+//		
+//		numDePags--;
+//	}
 	
 	/***
 	 * Busca si el producto está en el array
@@ -81,13 +82,13 @@ public class Paginable <E extends Producto> {
 	 */
 	public boolean contains(Producto<?> producto) {
 		boolean resul = false;
-		for (Producto<?> p : productos) {
+		Set<Integer> ids = productos.keySet();
+		for(Integer id: ids) {
 			if(resul) {
 				break;
 			} else {
-				resul = producto.equals(p);
+				resul = producto.equals(productos.get(id));
 			}
-			
 		}
 		return resul;
 	}
@@ -97,25 +98,35 @@ public class Paginable <E extends Producto> {
 	 * @param n Número de página
 	 * @return Devuelve array de productos
 	 */
-	public Producto<?>[] getPage(int n) {
-		int tamPag = prodPorPag;
-		int primProd = n * prodPorPag;
-		int ultProd = primProd + prodPorPag;
-		if(ultProd>productos.size()) {
-			ultProd = productos.size();
-			tamPag = ultProd-primProd;
-		}
-		Producto<?>[] resul = new Producto<?>[tamPag];
-		List pag = productos.subList(primProd, ultProd);
-				
-		for (int i = 0; i < pag.size(); i++) {
-			resul[i] = (Producto<?>) pag.get(i);
-		}
+//	public Producto<?>[] getPage(int n) {
+//		int tamPag = prodPorPag;
+//		int primProd = n * prodPorPag;
+//		int ultProd = primProd + prodPorPag;
+//		if(ultProd>productos.size()) {
+//			ultProd = productos.size();
+//			tamPag = ultProd-primProd;
+//		}
+//		Producto<?>[] resul = new Producto<?>[tamPag];
+//		List pag = productos.subList(primProd, ultProd);
+//				
+//		for (int i = 0; i < pag.size(); i++) {
+//			resul[i] = (Producto<?>) pag.get(i);
+//		}
+////		
+////		resul = (Producto<?>[]) pag.toArray();
 //		
-//		resul = (Producto<?>[]) pag.toArray();
-		
-		return resul;
+//		return resul;
+//	}
+	
+	public int findPageOf(Producto<?> p) {
+		if(!productos.contains(p)) {
+			return -1;
+		} else {
+			productos.
+		}
 	}
+	
+//	private int 
 	
 	public int getTotalPages() {
 		
