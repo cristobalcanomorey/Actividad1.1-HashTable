@@ -107,7 +107,6 @@ public class Paginable <E extends Producto> {
 			productos.remove(p.getId());
 			ArrayList<Producto<?>> lista = deHashAArray(productos);
 			numDePags = findPageOf(lista.get(lista.size() - 1), lista);
-			
 			return true;
 		} else {
 			return false;
@@ -152,13 +151,15 @@ public class Paginable <E extends Producto> {
 		for (int i = 0; i < pag.size(); i++) {
 			resul[i] = (Producto<?>) pag.get(i);
 		}
-//		
-//		resul = (Producto<?>[]) pag.toArray();
 		
 		return resul;
 	}
 	
-	public int findPageOf(Producto<?> p, ArrayList<Producto<?>> lista) {
+	public int findPageOf(Producto<?>p) {
+		return findPageOf(p,deHashAArray(productos));
+	}
+	
+	private int findPageOf(Producto<?> p, ArrayList<Producto<?>> lista) {
 		if(!lista.contains(p)) {
 			return -1;
 		} else {
