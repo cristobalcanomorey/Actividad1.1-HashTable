@@ -48,8 +48,12 @@ public class Paginable <E extends Producto> {
 			}
 		}
 		
+		return deArrayAHash(listaSinRepe);
+	}
+	
+	private Hashtable<Integer, Producto<?>> deArrayAHash(ArrayList<Producto<?>> prod){
 		Hashtable<Integer, Producto<?>> hProductos = new Hashtable<Integer, Producto<?>>();
-		for (Producto<?> producto : listaSinRepe) {
+		for (Producto<?> producto : prod) {
 			hProductos.put(producto.getId(), producto);
 		}
 		return hProductos;

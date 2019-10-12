@@ -16,7 +16,7 @@ public class Main {
 		
 		Paginable pg = new Paginable(ap);
 		
-//		pg.add(p4);
+//		pg.add(p5);
 
 		Producto<?>[] pag1 = pg.getPage(0);
 		
